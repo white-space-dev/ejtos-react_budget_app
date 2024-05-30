@@ -9,8 +9,12 @@ const AllocationForm = (props) => {
     const [action, setAction] = useState('');
 
     const submitEvent = () => {
-
-            if(cost > remaining) {
+        console.log(cost)
+        if (cost === '' || null || undefined) {
+            alert("The value has to be a number")
+            setCost("");
+            return;
+        } else if(cost > remaining) {
                 alert("The value cannot exceed remaining funds  £"+remaining);
                 setCost("");
                 return;
@@ -25,11 +29,13 @@ const AllocationForm = (props) => {
                 type: 'RED_EXPENSE',
                 payload: expense,
             });
+            setCost("");
         } else {
                 dispatch({
                     type: 'ADD_EXPENSE',
                     payload: expense,
                 });
+                setCost("");
             }
     };
 

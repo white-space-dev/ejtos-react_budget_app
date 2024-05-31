@@ -2,31 +2,45 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 const CurrencyDropdown = () => {
     const { currency } = useContext(AppContext);
-    const [newCurrency, setNewCurrency] = useState(currency ?? 0)
     const [showOptions, setShowOptions] = useState(false)
-    console.log('adsf', showOptions)
+
+    const currencies = [
+        {name: "Pound", symbol: "£"},
+        {name: "Ruppee", symbol: "₹"},
+        {name: "Dollar", symbol: "$"},
+        {name: "Euro", symbol: "€"},
+    ]
+
+    const dispatch = useContext(AppContext);
+    const handleCurrencyChange = (currency) => {
+        dispatch({
+            type: 'CHG_CURRENCY',
+            payload: currency,
+        });
+        setShowOptions(false);    }
     return (
-        // <>
-        //         <div className="input-group-prepend">
-        //         <label className="input-group-text" htmlFor="inputGroupSelect01">Currency ({newCurrency})</label>
-        //           <select className="custom-select" id="inputGroupSelect01" onChange={(event) => setNewCurrency(event.target.value)}>
-        //                 {/* <option defaultValue>Currency ({newCurrency})</option> */}
-        //         <option value="$ Dollar" name="dollar"> $ Dollar</option>
-        //         <option value="£ Pound" name="pound">£ Pound</option>
-        //         <option value="€ Euro" name="euro">€ Euro</option>
-        //         <option value="₹ Ruppee" name="ruppee">₹ Ruppee</option>
-        //           </select>
-        //           </div>
-        //           </>
         <div className="dropdown">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onClick={() => setShowOptions(prev => !prev)}>Dropdown Example
-                <span className="caret"></span></button>
-            {showOptions ? (<ul style={{backgroundColor: 'white', borderColor: 'black', borderWidth: 1}}>
-                <li><a href="#">HTML</a></li>
-                <li><a href="#">CSS</a></li>
-                <li><a href="#">JavaScript</a></li>
-            </ul>) : null}
-        </div>
+        {/* Button to toggle the dropdown menu */}
+        <button
+            className="btn btn-primary dropdown-toggle"
+            type="button"
+            onClick={() => setShowOptions(prev => !prev)}
+        >
+            Currency ({currency})
+            <span className="caret"></span>
+        </button>
+        
+        {/* Conditional rendering of the dropdown menu */}
+        {showOptions && (
+            <ul style={{ backgroundColor: 'white', borderColor: 'black', borderWidth: 1, borderStyle: 'solid', listStyleType: 'none', padding: 0 }}>
+                {currencies.map(curr => (
+                    <li key={curr} onClick={() => handleCurrencyChange(curr)} style={{ padding: '8px 12px' }}>
+                        {curr.symbol} {curr.name}
+                    </li>
+                ))}
+            </ul>
+        )}
+    </div>
     );
 };
 export default CurrencyDropdown;
